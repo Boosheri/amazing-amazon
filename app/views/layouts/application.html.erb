@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Amazon</title>
+    <title>AmazingAmazonMarch2019</title>
     <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
   </head>
-    <%= link_to 'Home', home_path %>
-    <%= link_to 'About', home_about_path %>
+
   <body>
+    <nav>
+      <a href="/">Home</a>
+      <%= link_to 'Home', home_path, {class: 'hi'} %>
+      |
+      <%= link_to 'About', about_path %>
+      |
+      <%= link_to 'Contact Us', contact_path %>
+    </nav>
     <%= yield %>
   </body>
 </html>
