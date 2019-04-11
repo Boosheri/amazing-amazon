@@ -10,12 +10,14 @@
 
   <body>
     <nav>
-      <a href="/">Home</a>
-      <%= link_to 'Home', home_path, {class: 'hi'} %>
+
+      <%= link_to 'Home', home_path %>
       |
       <%= link_to 'About', about_path %>
       |
       <%= link_to 'Contact Us', contact_path %>
+      |
+      <%= link_to 'New Product', new_product_path %>
     </nav>
     <%= yield %>
   </body>
