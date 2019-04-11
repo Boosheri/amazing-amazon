@@ -1,3 +1,56 @@
 <h1><%= @product.title %></h1>
 <p>Description: <%= @product.description %></p>
 <p>Price: <%= number_to_currency(@product.price) %></p>
+          <small>
+            <%= link_to(
+            "Delete",
+            product_path(@product),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+            ) %>
+          </small>
+
+<section>
+  <h3>Reviews</h3>
+
+  <%= form_with(model: [@product, @review], local: true) do |f| %>
+    <% if @review.errors.present? %>
+      <p class="form-errors">
+        <%= @review.errors.full_messages.join(", ") %>
+      </p>
+    <% end %>
+
+    <div class="form-group">
+        <%= f.label :rating %>
+        <%= f.number_field :rating, in: 1..5 %>
+        <%= f.label :body %>
+        <%= f.text_area(
+      :body, cols: 50, rows: 5,
+      placeholder: "What are your thoughts about this product?",
+      class: "form-control"
+      ) %>
+    </div>
+    <%= f.submit "Answer" %>
+  <% end %>
+
+  <hr />
+
+    <ul>
+      <% @reviews.each do |review| %>
+        <li>
+          <p>
+          <%= review.rating %> <br />
+          <%= review.body %> <br />
+          <small>
+            <%= link_to(
+            "Delete",
+            product_review_path(@product, review),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+            ) %>
+          </small>
+        </p>
+        </li>
+      <% end %>
+    </ul>
+</section>

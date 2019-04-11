@@ -12,7 +12,7 @@ class ProductsController < ApplicationController
       # browser to make a new request.
       # The redirect_to method is typically used with
       # with a named route helper.
-      redirect_to show_path(@product[:id])
+      redirect_to product_path(@product[:id])
     else
       render :new
     end
@@ -25,6 +25,8 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find params[:id]
+    @review = Review.new
+    @reviews = @product.reviews.order(created_at: :desc)
   end
 
   def edit
@@ -41,7 +43,7 @@ class ProductsController < ApplicationController
     end
   end
     
-    def delete
+    def destroy
       @product = Product.find params[:id]
       @product.destroy
       redirect_to products_path
