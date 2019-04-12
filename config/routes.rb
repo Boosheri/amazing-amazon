@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
+  # get 'sessions/new'
+  # get 'sessions/create'
   # get 'user/new'
   # get 'user/create'
-  # the above routes were auto generated when running the user controller command
+  # the above routes were auto generated when running the user/session controller command
   resources :users, only: [:new, :create]
-
+  resource :session, only: [:new, :create, :destroy]
   # get 'products/new', { to: 'products#new', as: :new_product }
   # post('/products', to: 'products#create')
   # get '/products/:id', {to: 'products#show', as: :product }

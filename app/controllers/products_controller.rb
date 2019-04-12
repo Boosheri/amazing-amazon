@@ -1,4 +1,9 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :find_product, only: [:show, :edit, :update, :destroy]
+
+
+
   def new
     @product = Product.new
   end
@@ -6,6 +11,7 @@ class ProductsController < ApplicationController
   def create
     product_params = params.require(:product).permit(:title, :description, :price)
     @product = Product.new product_params
+    @product.user = current_user
     if @product.save
       puts "product saved!"
       # The redirect_to method is used for telling the
@@ -47,5 +53,14 @@ class ProductsController < ApplicationController
       @product = Product.find params[:id]
       @product.destroy
       redirect_to products_path
+    end
+
+    private
+
+    def find_product
+      @product = Product.find params[:id]
+    end
+    def product_params
+    params.require(:product).permit(:title, :description, :price)
     end
 end
