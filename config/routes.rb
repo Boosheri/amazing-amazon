@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # get 'user/new'
+  # get 'user/create'
+  # the above routes were auto generated when running the user controller command
+  resources :users, only: [:new, :create]
+
   # get 'products/new', { to: 'products#new', as: :new_product }
   # post('/products', to: 'products#create')
   # get '/products/:id', {to: 'products#show', as: :product }
