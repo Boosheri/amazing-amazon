@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_product, only: [:show, :edit, :update, :destroy]
-
+  before_action :authorize!, only: [:edit, :update, :destroy]
 
 
   def new
@@ -30,18 +30,18 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find params[:id]
+    find_product
     @review = Review.new
     @reviews = @product.reviews.order(created_at: :desc)
   end
 
   def edit
-    @product = Product.find params[:id]
+    find_product
   end
   
   def update
     product_params = params.require(:product).permit(:title, :description, :price)
-    @product = Product.find params[:id]
+    find_product
     if @product.update product_params
       redirect_to product_path(@product)
     else
@@ -50,7 +50,7 @@ class ProductsController < ApplicationController
   end
     
     def destroy
-      @product = Product.find params[:id]
+      find_product
       @product.destroy
       redirect_to products_path
     end
@@ -60,7 +60,13 @@ class ProductsController < ApplicationController
     def find_product
       @product = Product.find params[:id]
     end
+
     def product_params
-    params.require(:product).permit(:title, :description, :price)
+      params.require(:product).permit(:title, :description, :price)
     end
+
+    def authorize!
+      redirect_to home_path, alert: 'Not Authorized' unless can?(:crud, @question)
+    end 
+  
 end

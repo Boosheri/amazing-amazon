@@ -1,14 +1,20 @@
 <h1><%= @product.title %></h1>
 <p>Description: <%= @product.description %></p>
 <p>Price: <%= number_to_currency(@product.price) %></p>
-          <small>
-            <%= link_to(
-            "Delete",
-            product_path(@product),
-            method: :delete,
-            data: { confirm: "Are you sure?" }
-            ) %>
-          </small>
+  <div>
+    <% if can?(:crud, @product) %>
+      <small>
+        <%= link_to "Edit", edit_product_path(@product) %>
+      </small> |
+      <small>
+        <%= link_to(
+        "Delete", product_path(@product),
+        method: :delete,
+        data: { confirm: "Are you sure?"}
+        )%>
+      </small>
+    <% end %>
+  </div>
 
 <section>
   <h3>Reviews</h3>
@@ -30,7 +36,7 @@
       class: "form-control"
       ) %>
     </div>
-    <%= f.submit "Answer" %>
+    <%= f.submit "Review" %>
   <% end %>
 
   <hr />
@@ -41,14 +47,19 @@
           <p>
           <%= review.rating %> <br />
           <%= review.body %> <br />
-          <small>
-            <%= link_to(
-            "Delete",
-            product_review_path(@product, review),
-            method: :delete,
-            data: { confirm: "Are you sure?" }
-            ) %>
-          </small>
+          <div>
+             <% if can?(:crud, review) %>
+            <small>
+              <%= link_to(
+              "Delete",
+              product_review_path(@product, review),
+              method: :delete, data: {
+                confirm: "Are you sure?"
+              }
+              ) %>
+            </small>
+          <% end %>
+          </div>
         </p>
         </li>
       <% end %>
