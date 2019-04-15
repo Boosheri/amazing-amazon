@@ -27,9 +27,9 @@ class Ability
     #            this rule yourself in the views and controller where applicable
     # can :edit, Question, user_id: user.id
 
-    # if user.is_admin?
-    #   can :manage, :all # manage means they can do everything (not just CRUD)
-    # end
+    if user.is_admin?
+      can :manage, :all # manage means they can do everything (not just CRUD)
+    end
 
     alias_action :create, :read, :update, :destroy, to: :crud
     can :crud, Product, user_id: user.id

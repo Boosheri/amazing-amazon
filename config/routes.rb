@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # get 'user/new'
   # get 'user/create'
   # the above routes were auto generated when running the user/session controller command
+
   resources :users, only: [:new, :create]
   resource :session, only: [:new, :create, :destroy]
   # get 'products/new', { to: 'products#new', as: :new_product }
@@ -24,5 +25,6 @@ Rails.application.routes.draw do
 
   get '/contact_us', { to: 'contacts#index', as: :contact }
   post '/contact_us', { to: 'contacts#create' }
+  get '/admin/panel', { to: 'users#admin' }
 
 end
