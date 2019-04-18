@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  resources :news_articles, only: [:new, :create]
   # get 'sessions/new'
   # get 'sessions/create'
   # get 'user/new'
