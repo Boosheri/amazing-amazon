@@ -50,14 +50,21 @@ class Ability
     can :destroy, Like do |like|
       like.user == user
     end
-
+    
     can :favourite, Product do |product|
-     product.user != user
+      product.user != user
     end
-
+    
     can :destroy, Favourite do |favourite|
-     favourite.user == user
+      favourite.user == user
     end
-
+    
+    can :crud, Vote do |vote|
+      vote.user == user
+    end
+    
+    can :create, Vote do |review|
+      review.user != user
+    end
   end
 end

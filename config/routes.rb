@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'votes/create'
+  get 'votes/destroy'
+  get 'votes/update'
   get 'favourites/index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :users, only: [:new, :create]
@@ -26,6 +29,7 @@ Rails.application.routes.draw do
     # "filled in"
     resources :reviews, shallow: true, only: [:create, :destroy] do
       resources :likes, only: [:create, :destroy]
+      resources :votes, only: [:create, :destroy, :update]
     end
     resources :favourites, shallow: true, only: [:create, :destroy]
   end

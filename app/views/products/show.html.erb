@@ -72,5 +72,22 @@
     <% end %>
     (<%= pluralize review.likes.count, 'like' %>)
 
+<span class="vote-widget">
+  <%vote = review.votes.find_by(user: current_user)%>
+    <% if vote.nil? %>
+    <%= link_to ('Upvote'), review_votes_path(review, is_up: true), method: :post %>
+    <%= link_to ('Downvote'), review_votes_path(review, is_up: false), method: :post %>
+    <%else%>
+      <% if vote.is_up == true %>
+        <%= link_to ('Upvoted'), vote_path(vote), method: :delete %>
+        <%= link_to ('Downvote'), vote_path(vote), method: :patch %>
+      <% else %>
+        <%= link_to ('Upvote'), vote_path(vote), method: :patch %>
+        <%= link_to ('Downvoted'), vote_path(vote), method: :delete %>
+    <% end %>
+  <% end %>
+
+    (<%= pluralize review.vote_total, 'vote' %>)
+
   </div>
 <% end %>
