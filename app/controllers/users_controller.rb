@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :admin_check!, only: [:admin]
-
+  before_action :authenticate_user!, only: [:admin]
   def new
     @user = User.new
   end
@@ -15,12 +15,12 @@ class UsersController < ApplicationController
     end
   end
 
-    def admin
-      @reviews = Review.all
-      @products = Product.all
-      @users = User.all
-      @user = current_user
-    end
+  def admin_check!
+    @users = User.order(created_at: :desc)
+    @products = Product.order(created_at: :desc)
+    @reviews = Review.order(created_at: :desc)
+    @user = current_user
+  end
 
   private
 
@@ -28,11 +28,8 @@ class UsersController < ApplicationController
     params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
   end
 
-    def admin_check!
-    
-      unless current_user.is_admin?
-        redirect_to home_path, notice: 'not authorized'
-    end
+  def authorize_admin!
+    redirect_to root_path, alert: 'Access denied!' unless current_user.admin?
   end
   
 end

@@ -5,43 +5,86 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-Product.delete_all
+
+# Make sure to clear old data out of your db when you run rails db:seed
+# In this case, Reviews will also be deleted since Product.destroy_all will
+# run our 'dependent: :destroy' callback.
+# Product.destroy_all()
+
+# Now we'll use delete_all and just include all
+# objects that need deleting.
+Favourite.delete_all
+Like.delete_all
 Review.delete_all
+Product.delete_all
 User.delete_all
 
-1000.times do
-  created_at = Faker::Date.backward(365 * 5)
-  p = Product.create(
-    # Faker is ruby module. We are just accessing
-    # the class Hacker inside the module Faker
-    title: Faker::Coffee.blend_name,
-    description: Faker::Coffee.notes,
-    price: Faker::Number.within(1..100),
-    created_at: created_at,
-    updated_at: created_at
+PASSWORD = "supersecret"
+NUM_OF_USERS = 20
+NUM_OF_PRODUCTS = 100
+
+super_user = User.create(
+  first_name: "Jon",
+  last_name: "Snow",
+  email: "js@winterfell.gov",
+  password: PASSWORD,
+  is_admin: true
+)
+
+NUM_OF_USERS.times do |num|
+  full_name = Faker::TvShows::SiliconValley.character.split(' ')
+  first_name = full_name[0]
+  last_name = full_name[1]
+  User.create(
+    first_name: first_name,
+    last_name: last_name,
+    email: "#{first_name}.#{last_name}-#{num}@piedpiper.com",
+    password: 'supersecret'
   )
+end
+
+users = User.all
+
+NUM_OF_PRODUCTS.times do
+  created_at = Faker::Date.backward(365 * 5)
+  p = Product.create({
+    title: Faker::Cannabis.strain,
+    description: Faker::Cannabis.health_benefit,
+    price: rand(100_000),
+    created_at: created_at,
+    updated_at: created_at,
+    user: users.sample
+  })
+
   if p.valid?
-    p.reviews = rand(0..15).times.map do
-      Review.new(rating: rand(1..5), body: Faker::Coffee.intensifier, user: users.sample)
+    rand(0..5).times.each do
+      Favourite.create(
+        user: users.sample,
+        product: p
+      )
+    end
+    rand(0..10).times.each do
+      r = Review.create(
+        rating: Faker::Number.between(1, 5),
+        body: Faker::TvShows::Seinfeld.quote,
+        product: p,
+        user: users.sample
+      )
+      if r.valid?
+        rand(0..5).times.each do
+          Like.create(
+            user: users.sample,
+            review: r
+          )
+        end
+      end
     end
   end
 end
 
-10.times do
-  first_name = Faker::Name.first_name
-  last_name = Faker::Name.last_name
-  User.create(
-    first_name: first_name,
-    last_name: last_name,
-    email: "#{first_name.downcase}.#{last_name.downcase}@example.com",
-    password: PASSWORD
-  )
-end
-
-user = User.all
-product = Product.all
-review = Review.all
-
-puts Cowsay.say("Generated #{ product.count } products", :cow)
-puts Cowsay.say("Generated #{ review.count } products", :cow)
-puts Cowsay.say("Generated #{ user.count } products", :cow)
+puts "Created #{User.count} users"
+puts "Created #{Product.count} products"
+puts "Created #{Review.count} reviews"
+puts "Created #{Like.count} likes"
+puts "Created #{Favourite.count} favourites"
+puts "Login as admin with #{super_user.email} and password of '#{PASSWORD}'!"

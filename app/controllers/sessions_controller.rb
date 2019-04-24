@@ -3,27 +3,20 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by_email params[:email]
-
-    if user&.authenticate params[:password]
-    # Equivalent to:
-    # if user && user.authenticate(params[:password])
-      # The 'session' is an object useable  in
-      # controllers that uses cookies to store
-      # encrypted data. To sign in a user, we store
-      # their user_id in the session for later
-      # retrieval
+    user = User.find_by(email: params[:email])
+    if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to home_path, notice: 'Logged in'
+      flash[:notice] = 'Thank you for signing in!'
+      redirect_to root_path
     else
-      flash[:alert] = "Wrong email or password"
+      flash.now[:alert] = 'Wrong email or password!'
       render :new
     end
   end
 
   def destroy
-    session[:user_id] = nil
-    flash[:notice] = "Logged out"
-    redirect_to home_path
+   session[:user_id] = nil
+   flash[:notice] = 'Signed out!'
+   redirect_to root_path
   end
 end
