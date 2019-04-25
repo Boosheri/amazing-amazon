@@ -11,6 +11,7 @@ class ProductsController < ApplicationController
     @product = Product.new product_params
     @product.user = current_user
     if @product.save
+      ProductMailer.new_product(@product).deliver_now
       redirect_to @product
       # same as redirect_to product_path(@product)
     else
