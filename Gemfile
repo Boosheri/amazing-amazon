@@ -26,6 +26,9 @@ gem 'jbuilder', '~> 2.5'
 gem 'bcrypt', '~> 3.1.7'
 gem 'cancancan'
 
+gem 'delayed_job_active_record'
+gem 'delayed_job_web'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
