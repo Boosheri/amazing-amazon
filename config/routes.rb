@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :products
+      resource :session, only: [:create, :destroy]
+    end
+  end
+  
   get 'votes/create'
   get 'votes/destroy'
   get 'votes/update'

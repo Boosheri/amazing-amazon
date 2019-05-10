@@ -29,6 +29,8 @@ gem 'cancancan'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 
+gem 'active_model_serializers'
+gem 'rack-cors'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -44,7 +46,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rails-controller-testing'
   gem 'factory_bot_rails'
-  gem 'faker'
 end
 
 group :development do

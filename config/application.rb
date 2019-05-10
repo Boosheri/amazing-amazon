@@ -29,5 +29,17 @@ module Amazon
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.middleware.insert_before(0, Rack::Cors) do
+      allow do
+        origins("127.0.0.1:5500")
+        resource(
+          "/api/*",
+          headers: :any,
+          credentials: true,
+          methods: [:get, :post, :delete, :patch, :update, :put, :option]
+        )
+      end
+    end
   end
 end
