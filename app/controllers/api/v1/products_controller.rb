@@ -16,14 +16,8 @@ class Api::V1::ProductsController < Api::ApplicationController
         product = Product.new product_params
         product.user = current_user
 
-            if product.save
-                render json: { id: product.id }
-            else
-                render(
-                json: { errors: product.errors.messages },
-                status: 422 # Unprocessable Entity
-                )
-            end
+        product.save!
+        render json: { id: product.id }
     end
 
     private
